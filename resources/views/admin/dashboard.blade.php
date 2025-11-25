@@ -3,65 +3,91 @@
 @section('title', 'Admin Dashboard')
 
 @section('content')
-<div class="container">
-    <div class="row mb-4">
+<div class="container py-4">
+    <div class="row mb-4 align-items-center">
         <div class="col">
-            <h2>Admin Dashboard</h2>
-            <p class="text-muted">Selamat datang, {{ auth()->user()->name }} ({{ strtoupper(auth()->user()->role) }})</p>
+            <h2 class="mb-1">
+                <i class="fa-solid fa-gauge-high text-primary me-2"></i>
+                Admin Dashboard
+            </h2>
+            <p class="text-muted mb-0">
+                Selamat datang, <span class="fw-semibold">{{ auth()->user()->name }}</span>
+                ({{ strtoupper(auth()->user()->role) }})
+            </p>
         </div>
     </div>
 
-    <div class="row g-4 mb-4">
+    {{-- Kartu statistik --}}
+    <div class="row g-3 mb-4">
         <div class="col-md-3">
-            <div class="card bg-primary text-white">
-                <div class="card-body">
-                    <h5 class="card-title">Total Aspirasi</h5>
-                    <h2>{{ $stats['total'] }}</h2>
+            <div class="card border-0 h-100" style="background: linear-gradient(135deg,#2563eb,#4f46e5);">
+                <div class="card-body text-white">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="small text-white-50 text-uppercase">Total Aspirasi</span>
+                        <i class="fa-solid fa-comments fa-lg"></i>
+                    </div>
+                    <h2 class="fw-bold mb-0">{{ $stats['total'] }}</h2>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card bg-warning text-white">
-                <div class="card-body">
-                    <h5 class="card-title">Submitted</h5>
-                    <h2>{{ $stats['submitted'] }}</h2>
+            <div class="card border-0 h-100" style="background: linear-gradient(135deg,#f59e0b,#f97316);">
+                <div class="card-body text-white">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="small text-white-50 text-uppercase">Submitted</span>
+                        <i class="fa-solid fa-paper-plane fa-lg"></i>
+                    </div>
+                    <h2 class="fw-bold mb-0">{{ $stats['submitted'] }}</h2>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card bg-info text-white">
-                <div class="card-body">
-                    <h5 class="card-title">In Progress</h5>
-                    <h2>{{ $stats['in_progress'] }}</h2>
+            <div class="card border-0 h-100" style="background: linear-gradient(135deg,#06b6d4,#0ea5e9);">
+                <div class="card-body text-white">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="small text-white-50 text-uppercase">In Progress</span>
+                        <i class="fa-solid fa-gears fa-lg"></i>
+                    </div>
+                    <h2 class="fw-bold mb-0">{{ $stats['in_progress'] }}</h2>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card bg-success text-white">
-                <div class="card-body">
-                    <h5 class="card-title">Completed</h5>
-                    <h2>{{ $stats['completed'] }}</h2>
+            <div class="card border-0 h-100" style="background: linear-gradient(135deg,#10b981,#22c55e);">
+                <div class="card-body text-white">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="small text-white-50 text-uppercase">Completed</span>
+                        <i class="fa-solid fa-circle-check fa-lg"></i>
+                    </div>
+                    <h2 class="fw-bold mb-0">{{ $stats['completed'] }}</h2>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="card">
-        <div class="card-header">
-            <h5 class="mb-0">Aspirasi Terbaru</h5>
+    {{-- Tabel aspirasi terbaru --}}
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+                <i class="fa-solid fa-clock-rotate-left me-2 text-primary"></i>
+                Aspirasi Terbaru
+            </h5>
+            <small class="text-muted">
+                Menampilkan {{ $recent->count() }} aspirasi terakhir
+            </small>
         </div>
         <div class="card-body">
             @if($recent->count() > 0)
                 <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
                             <tr>
                                 <th>Judul</th>
                                 <th>Mahasiswa</th>
                                 <th>Kategori</th>
                                 <th>Status</th>
                                 <th>Tanggal</th>
-                                <th>Aksi</th>
+                                <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -70,21 +96,33 @@
                                     <td>{{ Str::limit($aspiration->title, 40) }}</td>
                                     <td>
                                         @if($aspiration->is_anonymous)
-                                            <i class="bi bi-incognito"></i> Anonymous
+                                            <span class="text-muted">
+                                                <i class="fa-solid fa-user-secret me-1"></i> Anonymous
+                                            </span>
                                         @else
+                                            <i class="fa-solid fa-user me-1 text-secondary"></i>
                                             {{ $aspiration->user->name }}
                                         @endif
                                     </td>
-                                    <td>{{ $aspiration->category->name }}</td>
+                                    <td>
+                                        <span class="badge bg-primary-subtle text-primary border border-primary">
+                                            <i class="fa-solid fa-tag me-1"></i>
+                                            {{ $aspiration->category->name }}
+                                        </span>
+                                    </td>
                                     <td>
                                         <span class="badge status-{{ $aspiration->status }}">
                                             {{ ucfirst(str_replace('_', ' ', $aspiration->status)) }}
                                         </span>
                                     </td>
-                                    <td>{{ $aspiration->created_at->format('d M Y') }}</td>
                                     <td>
-                                        <a href="{{ route('admin.aspirations.show', $aspiration) }}" class="btn btn-sm btn-info">
-                                            <i class="bi bi-eye"></i> Lihat
+                                        <i class="fa-regular fa-calendar me-1 text-muted"></i>
+                                        {{ $aspiration->created_at->format('d M Y') }}
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="{{ route('admin.aspirations.show', $aspiration) }}"
+                                           class="btn btn-sm btn-outline-primary">
+                                            <i class="fa-solid fa-eye me-1"></i> Lihat
                                         </a>
                                     </td>
                                 </tr>
@@ -93,7 +131,10 @@
                     </table>
                 </div>
             @else
-                <p class="text-muted text-center py-4">Tidak ada aspirasi terbaru</p>
+                <div class="text-center py-4">
+                    <i class="fa-regular fa-inbox fa-3x mb-3" style="color:#9ca3af;"></i>
+                    <p class="text-muted mb-0">Tidak ada aspirasi terbaru.</p>
+                </div>
             @endif
         </div>
     </div>

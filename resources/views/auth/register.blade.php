@@ -2,20 +2,17 @@
 
 @section('title', 'Register - AspirasiKu')
 
-@section('content')
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-
+@push('styles')
 <style>
     body {
         background-color: #e8ecf3;
-        font-family: 'Poppins', sans-serif;
+        font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
-    
+
     .register-card {
         border: none;
         border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
         overflow: hidden;
     }
 
@@ -49,12 +46,14 @@
         border-radius: 12px;
         padding: 12px;
         font-weight: 500;
-        transition: transform 0.2s;
+        transition: transform 0.2s, box-shadow 0.2s;
+        box-shadow: 0 12px 25px rgba(67, 97, 238, 0.35);
     }
 
     .btn-primary:hover {
         background-color: #3f51b5;
         transform: translateY(-2px);
+        box-shadow: 0 16px 30px rgba(63, 81, 181, 0.45);
     }
 
     .btn-google {
@@ -80,12 +79,13 @@
     }
 
     .divider-text span {
-        padding: 7px;
+        padding: 7px 14px;
         font-size: 12px;
         position: relative;
         z-index: 2;
         background-color: #fff;
         color: #adb5bd;
+        border-radius: 999px;
     }
 
     .divider-text:after {
@@ -110,9 +110,10 @@
         display: block;
         margin-top: 0.5rem;
     }
-
 </style>
+@endpush
 
+@section('content')
 <div class="container py-5" style="min-height: 85vh; display: flex; align-items: center;">
     <div class="row justify-content-center w-100">
         <div class="col-md-6 col-lg-5">
@@ -129,58 +130,88 @@
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
                         
-                        {{-- Nama Lengkap Input --}}
+                        {{-- Nama Lengkap --}}
                         <div class="mb-3">
-                            <label class="form-label small text-muted fw-bold">Nama Lengkap</label>
-                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" 
-                                   placeholder="Masukkan nama lengkap" value="{{ old('name') }}" required>
+                            <label class="form-label small text-muted fw-bold">
+                                <i class="fa-solid fa-user me-1"></i> Nama Lengkap
+                            </label>
+                            <input type="text"
+                                   name="name"
+                                   class="form-control @error('name') is-invalid @enderror"
+                                   placeholder="Masukkan nama lengkap"
+                                   value="{{ old('name') }}"
+                                   required>
                             @error('name')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
-                        {{-- Email UNEJ Input --}}
+                        {{-- Email UNEJ --}}
                         <div class="mb-3">
-                            <label class="form-label small text-muted fw-bold">Email UNEJ</label>
-                            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" 
-                                   value="{{ old('email') }}" placeholder="nim@mail.unej.ac.id" required>
+                            <label class="form-label small text-muted fw-bold">
+                                <i class="fa-solid fa-envelope me-1"></i> Email UNEJ
+                            </label>
+                            <input type="email"
+                                   name="email"
+                                   class="form-control @error('email') is-invalid @enderror"
+                                   value="{{ old('email') }}"
+                                   placeholder="nim@mail.unej.ac.id"
+                                   required>
                             <div class="form-text">
-                                <i class="bi bi-info-circle me-1"></i> Harus menggunakan email @mail.unej.ac.id
+                                <i class="fa-solid fa-circle-info me-1"></i>
+                                Harus menggunakan email <strong>@mail.unej.ac.id</strong>.
                             </div>
                             @error('email')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
-                        {{-- NIM Input --}}
+                        {{-- NIM --}}
                         <div class="mb-3">
-                            <label class="form-label small text-muted fw-bold">NIM</label>
-                            <input type="text" name="nim" class="form-control @error('nim') is-invalid @enderror" 
-                                   placeholder="12 digit" value="{{ old('nim') }}" maxlength="12" required>
+                            <label class="form-label small text-muted fw-bold">
+                                <i class="fa-solid fa-id-badge me-1"></i> NIM
+                            </label>
+                            <input type="text"
+                                   name="nim"
+                                   class="form-control @error('nim') is-invalid @enderror"
+                                   placeholder="12 digit"
+                                   value="{{ old('nim') }}"
+                                   maxlength="12"
+                                   required>
                             @error('nim')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
-                        {{-- Password Input --}}
+                        {{-- Password --}}
                         <div class="mb-3">
-                            <label class="form-label small text-muted fw-bold">Password</label>
-                            <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" 
-                                   placeholder="Masukkan password" required>
+                            <label class="form-label small text-muted fw-bold">
+                                <i class="fa-solid fa-key me-1"></i> Password
+                            </label>
+                            <input type="password"
+                                   name="password"
+                                   class="form-control @error('password') is-invalid @enderror"
+                                   placeholder="Masukkan password"
+                                   required>
                             @error('password')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
-                        {{-- Konfirmasi Password Input --}}
+                        {{-- Konfirmasi Password --}}
                         <div class="mb-4">
-                            <label class="form-label small text-muted fw-bold">Konfirmasi Password</label>
-                            <input type="password" name="password_confirmation" class="form-control" 
-                                   placeholder="Ulangi password" required>
+                            <label class="form-label small text-muted fw-bold">
+                                <i class="fa-solid fa-key me-1"></i> Konfirmasi Password
+                            </label>
+                            <input type="password"
+                                   name="password_confirmation"
+                                   class="form-control"
+                                   placeholder="Ulangi password"
+                                   required>
                         </div>
 
                         <button type="submit" class="btn btn-primary w-100 mb-3 shadow-sm">
-                            Daftar Akun
+                            <i class="fa-solid fa-user-plus me-1"></i> Daftar Akun
                         </button>
                     </form>
 
@@ -190,12 +221,14 @@
 
                     {{-- Google Register Button --}}
                     <a href="{{ route('google.redirect') }}" class="btn btn-google w-100 mb-4 bg-white">
-                        <i class="bi bi-google me-2"></i> Daftar dengan Google
+                        <i class="fa-brands fa-google me-2"></i> Daftar dengan Google
                     </a>
 
                     <div class="text-center">
                         <span class="text-muted small">Sudah punya akun?</span>
-                        <a href="{{ route('login') }}" class="fw-bold text-decoration-none" style="color: #4361EE;">Login</a>
+                        <a href="{{ route('login') }}" class="fw-bold text-decoration-none" style="color: #4361EE;">
+                            Login
+                        </a>
                     </div>
                 </div>
             </div>
@@ -203,9 +236,8 @@
     </div>
 </div>
 
-{{-- SweetAlert2 Script --}}
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+{{-- Error -> SweetAlert2 (CDN sudah di layout) --}}
+@push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         @if ($errors->any())
@@ -213,7 +245,7 @@
             @foreach ($errors->all() as $error)
                 errorMsg += '{{ $error }}<br>';
             @endforeach
-            
+
             Swal.fire({
                 icon: 'error',
                 title: 'Registrasi Gagal',
@@ -223,5 +255,5 @@
         @endif
     });
 </script>
-
+@endpush
 @endsection

@@ -14,11 +14,18 @@ use App\Http\Controllers\PublicAspirationController;
 use App\Http\Controllers\Mahasiswa\ProfileController;
 use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 use App\Http\Middleware\RoleMiddleware;
+use App\Models\Aspiration;
 
 // Public Routes
 Route::get('/', function () {
-    return redirect()->route('login');
-});
+    $stats = [
+        'total'      => Aspiration::count(),
+        'in_progress'=> Aspiration::whereIn('status', ['submitted','under_review','in_progress'])->count(),
+        'completed'  => Aspiration::where('status', 'completed')->count(),
+    ];
+
+    return view('landing', compact('stats'));
+})->name('landing');
 
 Route::get('/public-aspirations', [PublicAspirationController::class, 'index'])->name('public.aspirations');
 Route::get('/public-aspirations/{aspiration}', [PublicAspirationController::class, 'show'])->name('public.aspirations.show');

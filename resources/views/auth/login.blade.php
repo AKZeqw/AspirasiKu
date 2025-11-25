@@ -2,20 +2,17 @@
 
 @section('title', 'Login - AspirasiKu')
 
-@section('content')
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-
+@push('styles')
 <style>
     body {
         background-color: #e8ecf3;
-        font-family: 'Poppins', sans-serif;
+        font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
-    
+
     .login-card {
         border: none;
         border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
         overflow: hidden;
     }
 
@@ -49,12 +46,14 @@
         border-radius: 12px;
         padding: 12px;
         font-weight: 500;
-        transition: transform 0.2s;
+        transition: transform 0.2s, box-shadow 0.2s;
+        box-shadow: 0 12px 25px rgba(67, 97, 238, 0.35);
     }
 
     .btn-primary:hover {
         background-color: #3f51b5;
         transform: translateY(-2px);
+        box-shadow: 0 16px 30px rgba(63, 81, 181, 0.45);
     }
 
     .btn-google {
@@ -80,12 +79,13 @@
     }
 
     .divider-text span {
-        padding: 7px;
+        padding: 7px 14px;
         font-size: 12px;
         position: relative;
         z-index: 2;
         background-color: #fff;
         color: #adb5bd;
+        border-radius: 999px;
     }
 
     .divider-text:after {
@@ -102,42 +102,58 @@
         font-size: 0.85rem;
         color: #6c757d;
     }
-
 </style>
+@endpush
 
+@section('content')
 <div class="container py-5" style="min-height: 80vh; display: flex; align-items: center;">
     <div class="row justify-content-center w-100">
         <div class="col-md-6 col-lg-5">
             <div class="card login-card bg-white">
                 <div class="card-body p-4 p-md-5">
-                    
+
                     {{-- Header Section --}}
                     <div class="login-header text-center mb-4">
                         <h3>Login</h3>
-                        {{-- Opsional: Tambahkan deskripsi singkat --}}
-                        <p class="mb-0">Selamat datang kembali!</p>
+                        <p class="mb-0">Selamat datang kembali di AspirasiKu!</p>
                     </div>
-                    
+
                     {{-- Form Start --}}
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
-                        
+
                         {{-- Email Input --}}
                         <div class="mb-3">
-                            <label class="form-label small text-muted fw-bold">Email</label>
-                            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" placeholder="Masukkan email di sini" value="{{ old('email') }}" required autofocus>
+                            <label class="form-label small text-muted fw-bold">
+                                <i class="fa-solid fa-envelope me-1"></i> Email
+                            </label>
+                            <input type="email"
+                                   name="email"
+                                   class="form-control @error('email') is-invalid @enderror"
+                                   placeholder="Masukkan email di sini"
+                                   value="{{ old('email') }}"
+                                   required
+                                   autofocus>
                         </div>
                         <div class="form-text mb-3">
-                                <i class="bi bi-info-circle me-1"></i> Gunakan email @mail.unej.ac.id
+                            <i class="fa-solid fa-circle-info me-1"></i>
+                            Gunakan email <strong>@mail.unej.ac.id</strong>.
                         </div>
 
+                        {{-- Password Input --}}
                         <div class="mb-4">
-                            <label class="form-label small text-muted fw-bold">Password</label>
-                            <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Masukkan password disini" required>
+                            <label class="form-label small text-muted fw-bold">
+                                <i class="fa-solid fa-key me-1"></i> Password
+                            </label>
+                            <input type="password"
+                                   name="password"
+                                   class="form-control @error('password') is-invalid @enderror"
+                                   placeholder="Masukkan password di sini"
+                                   required>
                         </div>
 
                         <button type="submit" class="btn btn-primary w-100 mb-3 shadow-sm">
-                            Login
+                            <i class="fa-solid fa-right-to-bracket me-1"></i> Login
                         </button>
                     </form>
 
@@ -147,12 +163,14 @@
 
                     {{-- Google Login Button --}}
                     <a href="{{ route('google.redirect') }}" class="btn btn-google w-100 mb-4 bg-white">
-                        <i class="bi bi-google me-2"></i> Login dengan Google
+                        <i class="fa-brands fa-google me-2"></i> Login dengan Google
                     </a>
 
                     <div class="text-center">
                         <span class="text-muted small">Belum punya akun?</span>
-                        <a href="{{ route('register') }}" class="fw-bold text-decoration-none" style="color: #4361EE;">Register</a>
+                        <a href="{{ route('register') }}" class="fw-bold text-decoration-none" style="color: #4361EE;">
+                            Register
+                        </a>
                     </div>
                 </div>
             </div>
@@ -160,9 +178,8 @@
     </div>
 </div>
 
-{{-- SweetAlert2 Script --}}
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+{{-- Error -> SweetAlert2 (sudah ada CDN di layout) --}}
+@push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         @if ($errors->any())
@@ -170,7 +187,7 @@
             @foreach ($errors->all() as $error)
                 errorMsg += '{{ $error }}<br>';
             @endforeach
-            
+
             Swal.fire({
                 icon: 'error',
                 title: 'Login Gagal',
@@ -180,5 +197,5 @@
         @endif
     });
 </script>
-
+@endpush
 @endsection
