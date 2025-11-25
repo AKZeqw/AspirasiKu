@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\PublicAspirationController;
 use App\Http\Controllers\Mahasiswa\ProfileController;
 use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
+use App\Http\Middleware\RoleMiddleware;
 
 // Public Routes
 Route::get('/', function () {
@@ -53,7 +54,7 @@ Route::middleware(['auth'])->prefix('mahasiswa')->name('mahasiswa.')->group(func
 });
 
 // Admin Routes
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     
     Route::get('/aspirations', [AdminAspirationController::class, 'index'])->name('aspirations.index');

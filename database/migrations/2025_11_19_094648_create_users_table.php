@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('nim', 15)->nullable()->unique();
             $table->string('password')->nullable();
-            $table->enum('role', ['mahasiswa', 'superadmin', 'tu', 'bem', 'bpm'])->default('mahasiswa');
+            $table->enum('role', ['mahasiswa', 'admin'])->default('mahasiswa');
             $table->string('google_id')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();

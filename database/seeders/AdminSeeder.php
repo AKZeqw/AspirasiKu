@@ -20,28 +20,28 @@ class AdminSeeder extends Seeder
                 'email' => 'superadmin@mail.unej.ac.id',
                 'nim' => null,
                 'password' => Hash::make('password'),
-                'role' => 'superadmin',
+                'role' => 'admin',
             ],
             [
                 'name' => 'Admin TU',
                 'email' => 'tu@mail.unej.ac.id',
                 'nim' => null,
                 'password' => Hash::make('password'),
-                'role' => 'tu',
+                'role' => 'admin',
             ],
             [
                 'name' => 'Admin BEM',
                 'email' => 'bem@mail.unej.ac.id',
                 'nim' => null,
                 'password' => Hash::make('password'),
-                'role' => 'bem',
+                'role' => 'admin',
             ],
             [
                 'name' => 'Admin BPM',
                 'email' => 'bpm@mail.unej.ac.id',
                 'nim' => null,
                 'password' => Hash::make('password'),
-                'role' => 'bpm',
+                'role' => 'admin',
             ],
         ];
 
