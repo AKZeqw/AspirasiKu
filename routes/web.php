@@ -10,8 +10,9 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminAspirationController;
 use App\Http\Controllers\Admin\AdminResponseController;
 use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicAspirationController;
+use App\Http\Controllers\Mahasiswa\ProfileController;
+use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 
 // Public Routes
 Route::get('/', function () {
@@ -62,4 +63,8 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::post('aspirations/{aspiration}/responses', [AdminResponseController::class, 'store'])->name('responses.store');
     
     Route::resource('categories', CategoryController::class);
+
+    Route::get('/profile', [AdminProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [AdminProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [AdminProfileController::class, 'updatePassword'])->name('profile.password');
 });

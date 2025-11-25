@@ -25,7 +25,7 @@
                         <div class="mb-3">
                             <label class="form-label">Email UNEJ</label>
                             <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" 
-                                   value="{{ old('email') }}" placeholder="nama@mail.unej.ac.id" required>
+                                   value="{{ old('email') }}" placeholder="nim@mail.unej.ac.id" required>
                             <small class="text-muted">Harus menggunakan email @mail.unej.ac.id</small>
                             @error('email')
                                 <div class="invalid-feedback">{{ $message }}</div>

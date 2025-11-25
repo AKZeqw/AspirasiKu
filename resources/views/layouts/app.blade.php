@@ -107,7 +107,10 @@
                                 {{ auth()->user()->name }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                @if(!auth()->user()->isAdmin())
+                                @if(auth()->user()->isAdmin())
+                                    <li><a class="dropdown-item" href="{{ route('admin.profile.edit') }}">Profil</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                @else
                                     <li><a class="dropdown-item" href="{{ route('mahasiswa.profile.edit') }}">Profil</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                 @endif
