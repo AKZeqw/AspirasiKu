@@ -192,38 +192,4 @@
         </div>
     </div>
 </div>
-
-{{-- Optional: konfirmasi SweetAlert2 khusus submit --}}
-@push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('form-aspirasi');
-        if (!form) return;
-
-        form.addEventListener('click', function (e) {
-            const btn = e.target.closest('button[type="submit"]');
-            if (!btn) return;
-
-            if (btn.value !== 'submit') return; // draft langsung submit
-
-            e.preventDefault();
-
-            Swal.fire({
-                title: 'Kirim aspirasi?',
-                text: 'Aspirasi akan dikirim ke admin dan mulai diproses.',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#2563eb',
-                cancelButtonColor: '#6b7280',
-                confirmButtonText: 'Ya, kirim',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit();
-                }
-            });
-        });
-    });
-</script>
-@endpush
 @endsection

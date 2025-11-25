@@ -128,6 +128,16 @@
                                     <i class="fa-solid fa-tags me-1"></i> Kategori
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('admin.news.index') }}">
+                                    <i class="fa-solid fa-newspaper me-1"></i> Berita
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('admin.news-types.index') }}">
+                                    <i class="fa-solid fa-layer-group me-1"></i> Tipe Berita
+                                </a>
+                            </li>
                         @else
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('mahasiswa.dashboard') }}">
@@ -142,6 +152,11 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('public.aspirations') }}">
                                     <i class="fa-solid fa-users-viewfinder me-1"></i> Aspirasi Publik
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('news.index') }}">
+                                    <i class="fa-solid fa-newspaper me-1"></i> Berita
                                 </a>
                             </li>
                         @endif
@@ -180,6 +195,11 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('public.aspirations') }}">
                                 <i class="fa-solid fa-comments me-1"></i> Aspirasi Publik
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('news.index') }}">
+                                <i class="fa-solid fa-newspaper me-1"></i> Berita
                             </a>
                         </li>
                         <li class="nav-item ms-lg-2">

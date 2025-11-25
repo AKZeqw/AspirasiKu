@@ -15,6 +15,9 @@ use App\Http\Controllers\Mahasiswa\ProfileController;
 use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Models\Aspiration;
+use App\Http\Controllers\NewsController;
+use App\Http\Controllers\Admin\NewsController as AdminNewsController;
+use App\Http\Controllers\Admin\NewsTypeController;
 
 // Public Routes
 Route::get('/', function () {
@@ -29,6 +32,9 @@ Route::get('/', function () {
 
 Route::get('/public-aspirations', [PublicAspirationController::class, 'index'])->name('public.aspirations');
 Route::get('/public-aspirations/{aspiration}', [PublicAspirationController::class, 'show'])->name('public.aspirations.show');
+
+Route::get('/news', [NewsController::class, 'index'])->name('news.index');
+Route::get('/news/{news}', [NewsController::class, 'show'])->name('news.show');
 
 // Auth Routes
 Route::middleware('guest')->group(function () {
@@ -58,6 +64,7 @@ Route::middleware(['auth'])->prefix('mahasiswa')->name('mahasiswa.')->group(func
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+
 });
 
 // Admin Routes
@@ -75,4 +82,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/profile', [AdminProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [AdminProfileController::class, 'update'])->name('profile.update');
     Route::put('/profile/password', [AdminProfileController::class, 'updatePassword'])->name('profile.password');
+
+    Route::resource('news', AdminNewsController::class);
+    Route::resource('news-types', NewsTypeController::class);
+
 });
