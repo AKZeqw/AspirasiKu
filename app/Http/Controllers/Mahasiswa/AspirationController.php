@@ -29,11 +29,12 @@ class AspirationController extends Controller
 
     public function store(Request $request)
     {
+        // PERBAIKAN 1: Hapus 'is_anonymous' => 'boolean' dari validasi
+        // Checkbox HTML mengirim "on" jika dicentang, yang akan membuat validasi 'boolean' gagal.
         $request->validate([
             'title' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
             'description' => 'required|string',
-            'is_anonymous' => 'boolean',
             'attachments.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx,xls,xlsx,zip|max:10240',
         ]);
 
@@ -42,7 +43,9 @@ class AspirationController extends Controller
             'category_id' => $request->category_id,
             'title' => $request->title,
             'description' => $request->description,
-            'is_anonymous' => $request->has('is_anonymous'),
+            // PERBAIKAN 2: Gunakan $request->boolean()
+            // Ini otomatis mengubah "on", "1", true menjadi boolean true. Jika kosong jadi false.
+            'is_anonymous' => $request->boolean('is_anonymous'),
             'status' => $request->action === 'submit' ? 'submitted' : 'draft',
         ]);
 
@@ -96,11 +99,11 @@ class AspirationController extends Controller
             abort(403);
         }
 
+        // PERBAIKAN 3: Hapus validasi boolean di update juga
         $request->validate([
             'title' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
             'description' => 'required|string',
-            'is_anonymous' => 'boolean',
             'attachments.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx,xls,xlsx,zip|max:10240',
         ]);
 
@@ -108,7 +111,8 @@ class AspirationController extends Controller
             'category_id' => $request->category_id,
             'title' => $request->title,
             'description' => $request->description,
-            'is_anonymous' => $request->has('is_anonymous'),
+            // PERBAIKAN 4: Gunakan boolean() di update juga
+            'is_anonymous' => $request->boolean('is_anonymous'),
             'status' => $request->action === 'submit' ? 'submitted' : 'draft',
         ]);
 
