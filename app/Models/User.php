@@ -20,7 +20,10 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'nim',
         'password',
+        'role',
+        'google_id',
     ];
 
     /**
@@ -44,5 +47,25 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function aspirations()
+    {
+        return $this->hasMany(Aspiration::class);
+    }
+
+    public function responses()
+    {
+        return $this->hasMany(Response::class);
+    }
+
+    public function isAdmin()
+    {
+        return in_array($this->role, ['admin']);
+    }
+
+    public function isMahasiswa()
+    {
+        return $this->role === 'mahasiswa';
     }
 }
