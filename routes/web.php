@@ -65,6 +65,9 @@ Route::middleware(['auth'])->prefix('mahasiswa')->name('mahasiswa.')->group(func
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
 
+    Route::put('/responses/{response}', [App\Http\Controllers\Mahasiswa\ResponseController::class, 'update'])->name('responses.update');
+    Route::delete('/responses/{response}', [App\Http\Controllers\Mahasiswa\ResponseController::class, 'destroy'])->name('responses.destroy');
+
 });
 
 // Admin Routes
@@ -85,5 +88,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     Route::resource('news', AdminNewsController::class);
     Route::resource('news-types', NewsTypeController::class);
+
+    Route::put('/responses/{response}', [App\Http\Controllers\Admin\AdminResponseController::class, 'update'])->name('responses.update');
+    Route::delete('/responses/{response}', [App\Http\Controllers\Admin\AdminResponseController::class, 'destroy'])->name('responses.destroy');
 
 });

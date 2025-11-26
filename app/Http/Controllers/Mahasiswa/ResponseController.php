@@ -7,6 +7,7 @@ use App\Models\Response;
 use App\Models\Aspiration;
 use App\Models\Attachment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ResponseController extends Controller
 {
@@ -46,10 +47,34 @@ class ResponseController extends Controller
         return back()->with('success', 'Balasan berhasil dikirim!');
     }
 
+    public function update(Request $request, Response $response)
+    {
+        if ($response->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $request->validate([
+            'message' => 'required|string',
+        ]);
+
+        $response->update([
+            'message' => $request->message
+        ]);
+
+        return back()->with('success', 'Balasan berhasil diperbarui!');
+    }
+
     public function destroy(Response $response)
     {
         if ($response->user_id !== auth()->id()) {
-            abort(403);
+            abort(403, 'Unauthorized action.');
+        }
+
+        foreach($response->attachments as $attachment) {
+            if (Storage::disk('public')->exists($attachment->file_path)) {
+                Storage::disk('public')->delete($attachment->file_path);
+            }
+            $attachment->delete();
         }
 
         $response->delete();
