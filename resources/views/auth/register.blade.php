@@ -8,24 +8,20 @@
         background-color: #e8ecf3;
         font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
-
     .register-card {
         border: none;
         border-radius: 20px;
         box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
         overflow: hidden;
     }
-
     .register-header h3 {
         font-weight: 600;
         color: #2B2D42;
     }
-
     .register-header p {
         color: #8D99AE;
         font-size: 0.9rem;
     }
-
     .form-control {
         background-color: #f8f9fa;
         border: 2px solid #eee;
@@ -33,13 +29,29 @@
         padding: 12px 15px;
         transition: all 0.3s;
     }
-
     .form-control:focus {
         background-color: #fff;
         border-color: #4361EE;
         box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.1);
     }
-
+    /* Styling khusus untuk input group agar tombol mata menyatu rapi */
+    .input-group .form-control {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+    .input-group .btn-toggle-password {
+        border: 2px solid #eee;
+        border-left: none;
+        background-color: #f8f9fa;
+        border-top-right-radius: 12px;
+        border-bottom-right-radius: 12px;
+        color: #6c757d;
+        z-index: 4; /* Agar tetap bisa diklik */
+    }
+    .input-group .btn-toggle-password:hover {
+        background-color: #e9ecef;
+        color: #4361EE;
+    }
     .btn-primary {
         background-color: #4361EE;
         border: none;
@@ -49,13 +61,11 @@
         transition: transform 0.2s, box-shadow 0.2s;
         box-shadow: 0 12px 25px rgba(67, 97, 238, 0.35);
     }
-
     .btn-primary:hover {
         background-color: #3f51b5;
         transform: translateY(-2px);
         box-shadow: 0 16px 30px rgba(63, 81, 181, 0.45);
     }
-
     .btn-google {
         border-radius: 12px;
         padding: 12px;
@@ -64,20 +74,17 @@
         color: #555;
         transition: all 0.2s;
     }
-
     .btn-google:hover {
         background-color: #fff1f1;
         border-color: #dc3545;
         color: #dc3545;
     }
-
     .divider-text {
         position: relative;
         text-align: center;
         margin-top: 15px;
         margin-bottom: 15px;
     }
-
     .divider-text span {
         padding: 7px 14px;
         font-size: 12px;
@@ -87,7 +94,6 @@
         color: #adb5bd;
         border-radius: 999px;
     }
-
     .divider-text:after {
         content: "";
         position: absolute;
@@ -97,19 +103,11 @@
         left: 0;
         z-index: 1;
     }
-
-    .form-text {
+    .form-text, .invalid-feedback {
         font-size: 0.85rem;
-        color: #6c757d;
         margin-top: 0.5rem;
     }
-
-    .invalid-feedback {
-        font-size: 0.85rem;
-        color: #dc3545;
-        display: block;
-        margin-top: 0.5rem;
-    }
+    .invalid-feedback { color: #dc3545; display: block; }
 </style>
 @endpush
 
@@ -135,15 +133,9 @@
                             <label class="form-label small text-muted fw-bold">
                                 <i class="fa-solid fa-user me-1"></i> Nama Lengkap
                             </label>
-                            <input type="text"
-                                   name="name"
-                                   class="form-control @error('name') is-invalid @enderror"
-                                   placeholder="Masukkan nama lengkap"
-                                   value="{{ old('name') }}"
-                                   required>
-                            @error('name')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
+                                   placeholder="Masukkan nama lengkap" value="{{ old('name') }}" required>
+                            @error('name') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
 
                         {{-- Email UNEJ --}}
@@ -151,19 +143,12 @@
                             <label class="form-label small text-muted fw-bold">
                                 <i class="fa-solid fa-envelope me-1"></i> Email UNEJ
                             </label>
-                            <input type="email"
-                                   name="email"
-                                   class="form-control @error('email') is-invalid @enderror"
-                                   value="{{ old('email') }}"
-                                   placeholder="nim@mail.unej.ac.id"
-                                   required>
+                            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
+                                   placeholder="nim@mail.unej.ac.id" value="{{ old('email') }}" required>
                             <div class="form-text">
-                                <i class="fa-solid fa-circle-info me-1"></i>
-                                Harus menggunakan email <strong>@mail.unej.ac.id</strong>.
+                                <i class="fa-solid fa-circle-info me-1"></i> Harus menggunakan email <strong>@mail.unej.ac.id</strong>.
                             </div>
-                            @error('email')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                            @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
 
                         {{-- NIM --}}
@@ -171,16 +156,9 @@
                             <label class="form-label small text-muted fw-bold">
                                 <i class="fa-solid fa-id-badge me-1"></i> NIM
                             </label>
-                            <input type="text"
-                                   name="nim"
-                                   class="form-control @error('nim') is-invalid @enderror"
-                                   placeholder="12 digit"
-                                   value="{{ old('nim') }}"
-                                   maxlength="12"
-                                   required>
-                            @error('nim')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                            <input type="text" name="nim" class="form-control @error('nim') is-invalid @enderror"
+                                   placeholder="12 digit" value="{{ old('nim') }}" maxlength="12" required>
+                            @error('nim') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
 
                         {{-- Password --}}
@@ -188,14 +166,15 @@
                             <label class="form-label small text-muted fw-bold">
                                 <i class="fa-solid fa-key me-1"></i> Password
                             </label>
-                            <input type="password"
-                                   name="password"
-                                   class="form-control @error('password') is-invalid @enderror"
-                                   placeholder="Masukkan password"
-                                   required>
-                            @error('password')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                            <div class="input-group">
+                                <input type="password" name="password" id="reg_password"
+                                       class="form-control @error('password') is-invalid @enderror"
+                                       placeholder="Masukkan password" required>
+                                <button class="btn btn-toggle-password toggle-password" type="button" data-target="reg_password">
+                                    <i class="fa-solid fa-eye-slash"></i>
+                                </button>
+                                @error('password') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
                         </div>
 
                         {{-- Konfirmasi Password --}}
@@ -203,11 +182,13 @@
                             <label class="form-label small text-muted fw-bold">
                                 <i class="fa-solid fa-key me-1"></i> Konfirmasi Password
                             </label>
-                            <input type="password"
-                                   name="password_confirmation"
-                                   class="form-control"
-                                   placeholder="Ulangi password"
-                                   required>
+                            <div class="input-group">
+                                <input type="password" name="password_confirmation" id="reg_password_confirmation"
+                                       class="form-control" placeholder="Ulangi password" required>
+                                <button class="btn btn-toggle-password toggle-password" type="button" data-target="reg_password_confirmation">
+                                    <i class="fa-solid fa-eye-slash"></i>
+                                </button>
+                            </div>
                         </div>
 
                         <button type="submit" class="btn btn-primary w-100 mb-3 shadow-sm">
@@ -215,20 +196,15 @@
                         </button>
                     </form>
 
-                    <div class="divider-text">
-                        <span>atau</span>
-                    </div>
+                    <div class="divider-text"><span>atau</span></div>
 
-                    {{-- Google Register Button --}}
                     <a href="{{ route('google.redirect') }}" class="btn btn-google w-100 mb-4 bg-white">
                         <i class="fa-brands fa-google me-2"></i> Daftar dengan Google
                     </a>
 
                     <div class="text-center">
                         <span class="text-muted small">Sudah punya akun?</span>
-                        <a href="{{ route('login') }}" class="fw-bold text-decoration-none" style="color: #4361EE;">
-                            Login
-                        </a>
+                        <a href="{{ route('login') }}" class="fw-bold text-decoration-none" style="color: #4361EE;">Login</a>
                     </div>
                 </div>
             </div>
@@ -236,7 +212,7 @@
     </div>
 </div>
 
-{{-- Error -> SweetAlert2 (CDN sudah di layout) --}}
+{{-- Error SweetAlert2 --}}
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -245,7 +221,6 @@
             @foreach ($errors->all() as $error)
                 errorMsg += '{{ $error }}<br>';
             @endforeach
-
             Swal.fire({
                 icon: 'error',
                 title: 'Registrasi Gagal',

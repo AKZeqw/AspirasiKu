@@ -45,36 +45,17 @@
                 <div class="col-md-6">
                     <div class="card border-0 shadow-lg">
                         <div class="card-body p-4">
-                            <h5 class="mb-3">
-                                <i class="fa-solid fa-chart-line me-1 text-primary"></i>
-                                Ringkasan Aktivitas
-                            </h5>
+                            {{-- Ringkasan Aktivitas --}}
+                            <h5 class="card-title mb-3">Ringkasan Aktivitas</h5>
                             <div class="row text-center g-3">
-                                <div class="col-4">
-                                    <div class="p-3 rounded bg-primary-subtle">
-                                        <i class="fa-solid fa-comments text-primary mb-1"></i>
-                                        <h5 class="mb-0">{{ $stats['total'] ?? '—' }}</h5>
-                                        <small class="text-muted">Aspirasi</small>
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="p-3 rounded bg-warning-subtle">
-                                        <i class="fa-solid fa-gears text-warning mb-1"></i>
-                                        <h5 class="mb-0">{{ $stats['in_progress'] ?? '—' }}</h5>
-                                        <small class="text-muted">Diproses</small>
-                                    </div>
-                                </div>
-                                <div class="col-4">
+                                <div class="col-12">
                                     <div class="p-3 rounded bg-success-subtle">
                                         <i class="fa-solid fa-circle-check text-success mb-1"></i>
                                         <h5 class="mb-0">{{ $stats['completed'] ?? '—' }}</h5>
-                                        <small class="text-muted">Selesai</small>
+                                        <small class="text-muted">Aspirasi Selesai</small>
                                     </div>
                                 </div>
                             </div>
-                            <p class="text-muted small mt-3 mb-0">
-                                Angka di atas hanya ilustrasi, bisa diisi dari query statistik aspirasi pada controller landing page.
-                            </p>
                         </div>
                     </div>
                 </div>

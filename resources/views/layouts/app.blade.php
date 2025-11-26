@@ -248,7 +248,7 @@
                 toast: true,
                 icon: 'success',
                 title: "{{ session('success') }}",
-                position: 'top-end',
+                position: 'top',
                 showConfirmButton: false,
                 timer: 2500,
                 timerProgressBar: true
@@ -260,12 +260,39 @@
                 toast: true,
                 icon: 'error',
                 title: "{{ session('error') }}",
-                position: 'top-end',
+                position: 'top',
                 showConfirmButton: false,
                 timer: 3000,
                 timerProgressBar: true
             });
         @endif
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const togglePasswords = document.querySelectorAll('.toggle-password');
+
+            togglePasswords.forEach(button => {
+                button.addEventListener('click', function () {
+                    const targetId = this.getAttribute('data-target');
+                    const passwordInput = document.getElementById(targetId);
+                    const icon = this.querySelector('i');
+
+                    if (passwordInput) {
+                        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                        passwordInput.setAttribute('type', type);
+
+                        if (type === 'password') {
+                            icon.classList.remove('fa-eye');
+                            icon.classList.add('fa-eye-slash');
+                        } else {
+                            icon.classList.remove('fa-eye-slash');
+                            icon.classList.add('fa-eye');
+                        }
+                    }
+                });
+            });
+        });
     </script>
 
     @stack('scripts')

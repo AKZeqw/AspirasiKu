@@ -27,16 +27,20 @@ class ProfileController extends Controller
 
     public function updatePassword(Request $request)
     {
+        $user = auth()->user();
+        $isGoogleUser = !empty($user->google_id);
+
         $request->validate([
-            'current_password' => 'required',
+            'current_password' => $isGoogleUser ? 'nullable' : 'required',
             'password' => 'required|string|min:8|confirmed',
         ]);
 
-        if (!Hash::check($request->current_password, auth()->user()->password)) {
-            return back()->withErrors(['current_password' => 'Password saat ini salah']);
+        if (! $isGoogleUser) {
+            if (! Hash::check($request->current_password, $user->password)) {
+                return back()->withErrors(['current_password' => 'Password saat ini salah']);
+            }
         }
-
-        auth()->user()->update([
+        $user->update([
             'password' => Hash::make($request->password)
         ]);
 
