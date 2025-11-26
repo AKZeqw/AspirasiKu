@@ -77,7 +77,7 @@
                                         <i class="fa-solid fa-eye me-1"></i> Lihat
                                     </a>
                                     <a href="{{ route('admin.news.edit', $item) }}"
-                                    class="btn btn-sm btn-outline-warning text-warning border-warning me-1">
+                                    class="btn btn-sm btn-outline-warning border-warning me-1">
                                         <i class="fa-solid fa-pen me-1"></i> Edit
                                     </a>
                                     <form action="{{ route('admin.news.destroy', $item) }}"

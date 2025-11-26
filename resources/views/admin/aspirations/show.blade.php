@@ -113,6 +113,7 @@
                                                             data-bs-toggle="modal" 
                                                             data-bs-target="#editResponseModal"
                                                             data-message="{{ $response->message }}"
+                                                            data-attachments="{{ $response->attachments }}" 
                                                             data-action="{{ route('admin.responses.update', $response->id) }}">
                                                             <i class="fa-solid fa-pen-to-square me-2 text-warning"></i> Edit
                                                         </button>
@@ -216,12 +217,27 @@
                 <h5 class="modal-title"><i class="fa-solid fa-pen-to-square me-2"></i> Edit Tanggapan</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="formEditResponse" method="POST" action="">
+            <form id="formEditResponse" method="POST" action="" enctype="multipart/form-data">
                 @csrf @method('PUT')
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="editMessage" class="form-label">Pesan</label>
                         <textarea class="form-control" id="editMessage" name="message" rows="4" required></textarea>
+                    </div>
+
+                    {{-- List Lampiran Lama --}}
+                    <div id="existing-attachments-container" class="mb-3 d-none">
+                        <label class="form-label small text-muted">Lampiran Saat Ini:</label>
+                        <div id="attachment-list" class="list-group">
+                            {{-- Diisi JS --}}
+                        </div>
+                        <small class="text-danger fst-italic mt-1 d-block" style="font-size: 0.8rem">*Klik tombol "Hapus" untuk hapus lampiran.</small>
+                    </div>
+
+                    {{-- Upload Lampiran Baru --}}
+                    <div class="mb-3">
+                        <label class="form-label">Upload Lampiran Baru (Opsional)</label>
+                        <input type="file" name="attachments[]" class="form-control" multiple>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -236,32 +252,94 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // 1. Logic Tombol Edit
+        
+        // --- LOGIC MODAL EDIT ---
         const editButtons = document.querySelectorAll('.btn-edit-response');
         const editForm = document.getElementById('formEditResponse');
         const editMessage = document.getElementById('editMessage');
+        const attachmentList = document.getElementById('attachment-list');
+        const attachmentContainer = document.getElementById('existing-attachments-container');
 
         editButtons.forEach(btn => {
             btn.addEventListener('click', function() {
                 const message = this.getAttribute('data-message');
                 const action = this.getAttribute('data-action');
+                let attachments = [];
+                try {
+                    attachments = JSON.parse(this.getAttribute('data-attachments'));
+                } catch (e) { console.error("Error parsing attachments", e); }
                 
                 editMessage.value = message;
                 editForm.action = action;
+
+                // Reset UI
+                attachmentList.innerHTML = '';
+                
+                if (attachments && attachments.length > 0) {
+                    attachmentContainer.classList.remove('d-none');
+                    
+                    attachments.forEach(att => {
+                        const uniqueId = `del_chk_${att.id}`;
+                        const item = document.createElement('div');
+                        item.className = 'list-group-item list-group-item-action p-2';
+                        
+                        item.innerHTML = `
+                            <div class="d-flex align-items-center justify-content-between w-100">
+                                <div class="d-flex align-items-center overflow-hidden">
+                                    <input class="form-check-input d-none attachment-deleter" type="checkbox" name="delete_attachments[]" value="${att.id}" id="${uniqueId}">
+                                    <label class="form-check-label text-truncate" for="${uniqueId}" style="max-width: 250px; cursor: pointer;">
+                                        <i class="fa-regular fa-file me-2 text-secondary"></i>
+                                        <span class="filename-text">${att.file_name}</span>
+                                    </label>
+                                </div>
+                                <label for="${uniqueId}" class="badge bg-danger cursor-pointer delete-badge mb-0">
+                                    <i class="fa-solid fa-trash me-1"></i> Hapus
+                                </label>
+                            </div>
+                        `;
+                        
+                        attachmentList.appendChild(item);
+                    });
+
+                    // Event Listener Efek Coret
+                    document.querySelectorAll('.attachment-deleter').forEach(chk => {
+                        chk.addEventListener('change', function() {
+                            const parent = this.closest('.list-group-item');
+                            const labelText = parent.querySelector('.filename-text');
+                            const badge = parent.querySelector('.delete-badge');
+                            
+                            if(this.checked) {
+                                labelText.style.textDecoration = 'line-through';
+                                labelText.classList.add('text-danger');
+                                parent.classList.add('bg-light');
+                                badge.className = 'badge bg-secondary cursor-pointer delete-badge mb-0';
+                                badge.innerHTML = '<i class="fa-solid fa-rotate-left me-1"></i> Batal';
+                            } else {
+                                labelText.style.textDecoration = 'none';
+                                labelText.classList.remove('text-danger');
+                                parent.classList.remove('bg-light');
+                                badge.className = 'badge bg-danger cursor-pointer delete-badge mb-0';
+                                badge.innerHTML = '<i class="fa-solid fa-trash me-1"></i> Hapus';
+                            }
+                        });
+                    });
+
+                } else {
+                    attachmentContainer.classList.add('d-none');
+                }
             });
         });
 
-        // 2. Konfirmasi Hapus Response
+        // --- LOGIC HAPUS & UPDATE STATUS ---
         document.querySelectorAll('.delete-response-form').forEach(form => {
-            form.addEventListener('submit', function(e) {
+            form.addEventListener('submit', function (e) {
                 e.preventDefault();
                 Swal.fire({
                     title: 'Hapus tanggapan?',
-                    text: "Tanggapan yang dihapus tidak bisa dikembalikan.",
+                    text: 'Tanggapan yang dihapus tidak dapat dikembalikan.',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#dc2626',
-                    cancelButtonColor: '#6b7280',
                     confirmButtonText: 'Ya, hapus'
                 }).then((result) => {
                     if (result.isConfirmed) form.submit();
@@ -269,20 +347,22 @@
             });
         });
 
-        // 3. Konfirmasi Update Status (Yang sudah ada)
-        document.getElementById('form-update-status')?.addEventListener('submit', function(e) {
-            e.preventDefault();
-            Swal.fire({
-                title: 'Ubah status?',
-                text: 'Perubahan status akan terlihat oleh mahasiswa.',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#2563eb',
-                confirmButtonText: 'Ya, simpan'
-            }).then((result) => {
-                if (result.isConfirmed) this.submit();
+        const statusForm = document.getElementById('form-update-status');
+        if(statusForm) {
+            statusForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Ubah status?',
+                    text: 'Perubahan status akan terlihat oleh mahasiswa.',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#2563eb',
+                    confirmButtonText: 'Ya, simpan'
+                }).then((result) => {
+                    if (result.isConfirmed) this.submit();
+                });
             });
-        });
+        }
     });
 </script>
 @endpush
