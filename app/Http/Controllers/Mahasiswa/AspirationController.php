@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Storage;
 
 class AspirationController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
         $aspirations = Aspiration::where('user_id', auth()->id())
@@ -21,12 +24,18 @@ class AspirationController extends Controller
         return view('mahasiswa.aspirations.index', compact('aspirations'));
     }
 
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
         $categories = Category::all();
         return view('mahasiswa.aspirations.create', compact('categories'));
     }
 
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
         // PERBAIKAN 1: Hapus 'is_anonymous' => 'boolean' dari validasi
@@ -69,6 +78,9 @@ class AspirationController extends Controller
         return redirect()->route('mahasiswa.aspirations.index')->with('success', $message);
     }
 
+    /**
+     * Display the specified resource.
+     */
     public function show(Aspiration $aspiration)
     {
         if ($aspiration->user_id !== auth()->id()) {
@@ -79,6 +91,9 @@ class AspirationController extends Controller
         return view('mahasiswa.aspirations.show', compact('aspiration'));
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     */
     public function edit(Aspiration $aspiration)
     {
         if ($aspiration->user_id !== auth()->id()) {
@@ -93,6 +108,9 @@ class AspirationController extends Controller
         return view('mahasiswa.aspirations.edit', compact('aspiration', 'categories'));
     }
 
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(Request $request, Aspiration $aspiration)
     {
         if ($aspiration->user_id !== auth()->id()) {
@@ -134,6 +152,9 @@ class AspirationController extends Controller
         return redirect()->route('mahasiswa.aspirations.show', $aspiration)->with('success', 'Aspirasi berhasil diupdate!');
     }
 
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy(Aspiration $aspiration)
     {
         if ($aspiration->user_id !== auth()->id()) {

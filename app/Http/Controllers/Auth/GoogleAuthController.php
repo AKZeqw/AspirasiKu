@@ -9,11 +9,17 @@ use Illuminate\Support\Facades\Auth;
 
 class GoogleAuthController extends Controller
 {
+    /**
+     * Redirect the user to the Google authentication page.
+     */
     public function redirect()
     {
         return Socialite::driver('google')->redirect();
     }
 
+    /**
+     * Handle the callback from Google after authentication.
+     */
     public function callback()
     {
         try {

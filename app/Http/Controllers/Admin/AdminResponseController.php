@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Storage;
 
 class AdminResponseController extends Controller
 {
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request, Aspiration $aspiration)
     {
         $request->validate([
@@ -42,9 +45,11 @@ class AdminResponseController extends Controller
         return back()->with('success', 'Tanggapan berhasil dikirim!');
     }
 
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(Request $request, Response $response)
     {
-        // Pastikan admin hanya mengedit tanggapannya sendiri
         if ($response->user_id !== auth()->id()) {
             abort(403, 'Admin hanya dapat mengedit tanggapannya sendiri.');
         }
@@ -56,12 +61,10 @@ class AdminResponseController extends Controller
             'delete_attachments.*' => 'exists:attachments,id',
         ]);
 
-        // 1. Update Pesan
         $response->update([
             'message' => $request->message
         ]);
 
-        // 2. Hapus Lampiran yang dipilih
         if ($request->filled('delete_attachments')) {
             $attachmentsToDelete = Attachment::whereIn('id', $request->delete_attachments)
                 ->where('attachable_id', $response->id)
@@ -76,7 +79,6 @@ class AdminResponseController extends Controller
             }
         }
 
-        // 3. Upload Lampiran Baru
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {
                 $path = $file->store('attachments/responses', 'public');
@@ -94,6 +96,9 @@ class AdminResponseController extends Controller
         return back()->with('success', 'Tanggapan berhasil diperbarui!');
     }
 
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy(Response $response)
     {
         foreach($response->attachments as $attachment) {

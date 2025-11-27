@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 
 class PublicAspirationController extends Controller
 {
+    /**
+     * Display a listing of public aspirations.
+     */
     public function index(Request $request)
     {
         $query = Aspiration::with(['user', 'category'])
@@ -23,6 +26,9 @@ class PublicAspirationController extends Controller
         return view('public.aspirations.index', compact('aspirations', 'categories'));
     }
 
+    /**
+     * Display the specified public aspiration.
+     */
     public function show(Aspiration $aspiration)
     {
         if ($aspiration->status !== 'completed') {

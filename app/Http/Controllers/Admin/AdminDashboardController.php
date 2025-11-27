@@ -7,6 +7,9 @@ use App\Models\Aspiration;
 
 class AdminDashboardController extends Controller
 {
+    /**
+     * Display the admin dashboard.
+     */
     public function index()
     {
         $stats = [

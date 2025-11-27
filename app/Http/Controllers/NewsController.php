@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 
 class NewsController extends Controller
 {
+    /**
+     * Display a listing of the news articles.
+     */
     public function index(Request $request)
     {
         $query = News::with('type')
@@ -30,6 +33,9 @@ class NewsController extends Controller
         return view('news.index', compact('news', 'types'));
     }
 
+    /**
+     * Display the specified news article.
+     */
     public function show(News $news)
     {
         if (! $news->is_published) {

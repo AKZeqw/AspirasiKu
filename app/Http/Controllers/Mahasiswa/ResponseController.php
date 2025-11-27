@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Storage;
 
 class ResponseController extends Controller
 {
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request, Aspiration $aspiration)
     {
         // Cek apakah aspirasi milik user ini
@@ -52,6 +55,9 @@ class ResponseController extends Controller
         return back()->with('success', 'Balasan berhasil dikirim!');
     }
 
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(Request $request, Response $response)
     {
         // 1. Cek Pemilik
@@ -110,6 +116,9 @@ class ResponseController extends Controller
         return back()->with('success', 'Balasan berhasil diperbarui!');
     }
 
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy(Response $response)
     {
         if ($response->user_id !== auth()->id()) {

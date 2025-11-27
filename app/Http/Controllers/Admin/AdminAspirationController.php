@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 
 class AdminAspirationController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index(Request $request)
     {
         $query = Aspiration::with(['user', 'category'])
@@ -26,12 +29,18 @@ class AdminAspirationController extends Controller
         return view('admin.aspirations.index', compact('aspirations'));
     }
 
+    /**
+     * Display the specified resource.
+     */
     public function show(Aspiration $aspiration)
     {
         $aspiration->load(['user', 'category', 'responses.user', 'responses.attachments', 'attachments']);
         return view('admin.aspirations.show', compact('aspiration'));
     }
 
+    /**
+     * Update the status of the specified resource.
+     */
     public function updateStatus(Request $request, Aspiration $aspiration)
     {
         $request->validate([

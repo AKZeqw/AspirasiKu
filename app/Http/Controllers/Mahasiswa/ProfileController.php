@@ -8,11 +8,17 @@ use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
+    /**
+     * Show the form for editing the profile.
+     */
     public function edit()
     {
         return view('mahasiswa.profile.edit');
     }
 
+    /**
+     * Update the profile.
+     */
     public function update(Request $request)
     {
         $request->validate([
@@ -25,6 +31,9 @@ class ProfileController extends Controller
         return back()->with('success', 'Profil berhasil diupdate!');
     }
 
+    /**
+     * Update the password.
+     */
     public function updatePassword(Request $request)
     {
         $user = auth()->user();
